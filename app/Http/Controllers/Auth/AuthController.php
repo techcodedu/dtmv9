@@ -41,6 +41,9 @@ class AuthController extends Controller
         case 'chancellor':
             return redirect()->route('chancellor.dashboard');
             break;
+        case 'admin':
+            return redirect()->route('system.dashboard');
+            break;
         // add more cases for other roles as needed
         default:
             return redirect()->route('login');
