@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Document;
+use Log;
 use App\Models\File;
-use App\Models\Routing;
 use App\Models\User;
-use App\Models\Department;
 use App\Models\Office;
+use App\Models\Routing;
+use App\Models\Document;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -102,7 +103,7 @@ class CollegeController extends Controller
         }
         
         // Save the routing to the database
-        \Log::info('Before try block');
+        Log::info('Before try block');
         
         try {
             $routing->save();
@@ -157,19 +158,20 @@ class CollegeController extends Controller
         // Get the current authenticated user
         $user = Auth::user();
     
-        // Get all the documents uploaded by the current user
-        // $documents = $documents = Document::with(['latestRouting', 'department', 'files'])
-        //           ->join('departments', 'documents.department_id', '=', 'departments.id')
-        //           ->select('documents.*', 'departments.name AS department_name', 'documents.id AS document_id')
-        //           ->where('department_id', $user->department_id)
-        //           ->orderBy('date_forwarded', 'desc')
-        //           ->get();
+        //Get all the documents uploaded by the current user
+        $documents = $documents = Document::with(['latestRouting', 'department', 'files'])
+                  ->join('departments', 'documents.department_id', '=', 'departments.id')
+                  ->select('documents.*', 'departments.name AS department_name', 'documents.document_id AS document_id')
+                  ->where('department_id', $user->department_id)
+                  ->orderBy('date_forwarded', 'desc')
+                  ->paginate();
 
-        $documents = Document::with(['latestRouting', 'department', 'files'])
-        ->join('departments', 'documents.department_id', '=', 'departments.id')
-        ->select('documents.*', 'departments.name AS department_name', 'documents.document_id AS document_id')
-        ->orderBy('date_forwarded', 'desc')
-        ->paginate(2);
+        //   gets all the documents regardless on deparment_id
+        // $documents = Document::with(['latestRouting', 'department', 'files'])
+        // ->join('departments', 'documents.department_id', '=', 'departments.id')
+        // ->select('documents.*', 'departments.name AS department_name', 'documents.document_id AS document_id')
+        // ->orderBy('date_forwarded', 'desc')
+        // ->paginate(2);
 
 
 

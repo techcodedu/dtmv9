@@ -5,6 +5,8 @@ use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\CampusExtension;
 use App\Http\Controllers\ChancellorController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\AdminController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +25,17 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 //     Route::get('/campusExtension/dashboard', [CampusExtension::class, 'dashboard'])->name('campus_extensions.dashboard');
 // });
 Route::middleware(['auth'])->group(function () {
+
+    Route::middleware(['role:admin'])->group(function () {
+        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('system.dashboard');
+        Route::get('/admin/createUser', [AdminController::class, 'create'])->name('users.create');
+        Route::post('/admin/saveUser', [AdminController::class, 'store'])->name('users.store');
+        Route::get('/users/{id}/edit', [AdminController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [AdminController::class, 'update'])->name('users.update');
+        Route::delete('/users/{id}', [AdminController::class, 'destroy'])->name('users.destroy');
+
+        // Add more routes for campus_extensions role as needed
+    });
 
     Route::middleware(['role:college'])->group(function () {
         Route::get('/college/dashboard', [CollegeController::class, 'dashboard'])->name('college.dashboard');
