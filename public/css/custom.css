@@ -36,11 +36,24 @@
   height: 50px;
   width: 50px;
 }
-  
-  
-/* pagination
-.pagination > li > a, .pagination > li > span {
-  font-size: 12px;
+td.d-flex.justify-content-between.align-items-center .flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
 }
- */
+
+/* Responsive styling for AdminLTE sidebar */
+@media (max-width: 767.98px) {
+  td.d-flex.justify-content-between.align-items-center .flex-wrap {
+      margin-top: 5px;
+      display: block;
+  }
+}
+
+/* Properly aligns and reduces button size */
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
 

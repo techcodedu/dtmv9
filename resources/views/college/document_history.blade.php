@@ -59,6 +59,7 @@
                             <th>Filename</th>
                             <th>To Office</th>
                             <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,6 +72,16 @@
                                 <td>{{ $document->filename }}</td>
                                 <td>{{ optional($document->latestRouting->toOffice)->name }}</td>
                                 <td>{{ optional($document->latestRouting)->status }}</td>
+                                <td class="d-flex justify-content-center flex-wrap">
+                                    <div class="d-flex flex-wrap">
+                                        <a href="{{ route('document.view', $document->document_id) }}" class="btn btn-info btn-sm mb-3">
+                                            <i class="fas fa-eye mr-2"></i> View
+                                        </a>
+                                        <a href="{{ route('document.edit', $document->document_id) }}" class="btn btn-warning btn-sm ml-3 mb-3">
+                                            <i class="fas fa-edit mr-2"></i> Edit
+                                        </a>
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -83,5 +94,6 @@
         </div>
     </div>
 @endsection
+
 
 
