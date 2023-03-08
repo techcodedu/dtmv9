@@ -41,9 +41,12 @@ class RoleMiddleware
             case 'chancellor':
                 return 'chancellor.dashboard';
                 break;
+            case 'admin':
+                return 'system.dashboard';
+                break;
             // add more cases for other roles as needed
             default:
-                return 'home';
+                return 'login';
         }
     }
 }
