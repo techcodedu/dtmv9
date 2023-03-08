@@ -45,54 +45,50 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Document Management</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Document ID</th>
-                            <th>Department</th>
-                            <th>Type</th>
-                            <th>Date Forwarded</th>
-                            <th>Filename</th>
-                            <th>To Office</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($documents as $document)
-                            <tr>
-                                <td>{{ $document->document_id }}</td>
-                                <td>{{ $document->department->name }}</td>
-                                <td>{{ $document->document_type }}</td>
-                                <td>{{ $document->date_forwarded }}</td>
-                                <td>{{ $document->filename }}</td>
-                                <td>{{ optional($document->latestRouting->toOffice)->name }}</td>
-                                <td>{{ optional($document->latestRouting)->status }}</td>
-                                <td class="d-flex justify-content-center flex-wrap">
-                                    <div class="d-flex flex-wrap">
-                                        <a href="{{ route('document.view', $document->document_id) }}" class="btn btn-info btn-sm mb-3">
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Document Management</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                @foreach ($documents as $document)
+                    <div class="col-md-6">
+                        <div class="timeline">
+                            <div class="time-label">
+                                <span class="bg-red">{{ $document->date_forwarded }}</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-file bg-green"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="far fa-clock"></i> {{ $document->date_forwarded }}</span>
+                                    <h3 class="timeline-header"><a href="#">{{ $document->document_id }}</a> forwarded to {{ optional($document->latestRouting->toOffice)->name }}</h3>
+                                    <div class="timeline-body">
+                                        {{ $document->document_type }} from {{ $document->department->name }} with filename {{ $document->filename }} has been forwarded to {{ optional($document->latestRouting->toOffice)->name }} for processing.
+                                    </div>
+                                    <div class="timeline-footer">
+                                        <span class="badge badge-{{ $document->latestRouting->status_color }}">{{ $document->latestRouting->status }}</span>
+                                        <a href="{{ route('document.view', $document->document_id) }}" class="btn btn-info btn-sm float-right">
                                             <i class="fas fa-eye mr-2"></i> View
                                         </a>
-                                        <a href="{{ route('document.edit', $document->document_id) }}" class="btn btn-warning btn-sm ml-3 mb-3">
+                                        <a href="{{ route('document.edit', $document->document_id) }}" class="btn btn-warning btn-sm float-right mr-3">
                                             <i class="fas fa-edit mr-2"></i> Edit
                                         </a>
                                     </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    
-                </table>
-                <div class="d-flex justify-content-center">
-                    {{ $documents->links('vendor.pagination.bootstrap-4') }}
-                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <div class="d-flex justify-content-center">
+                {{ $documents->links('vendor.pagination.bootstrap-4') }}
             </div>
         </div>
     </div>
+</div>
+
+
 @endsection
 
 

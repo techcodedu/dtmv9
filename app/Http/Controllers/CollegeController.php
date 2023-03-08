@@ -158,13 +158,21 @@ class CollegeController extends Controller
         // Get the current authenticated user
         $user = Auth::user();
     
-        //Get all the documents uploaded by the current user
-        $documents = $documents = Document::with(['latestRouting', 'department', 'files'])
-                  ->join('departments', 'documents.department_id', '=', 'departments.id')
-                  ->select('documents.*', 'departments.name AS department_name', 'documents.document_id AS document_id')
-                  ->where('department_id', $user->department_id)
-                  ->orderBy('date_forwarded', 'desc')
-                  ->paginate();
+        //get all document uploader by specific user
+        $documents = Document::with(['latestRouting', 'department', 'files'])
+            ->join('departments', 'documents.department_id', '=', 'departments.id')
+            ->select('documents.*', 'departments.name AS department_name', 'documents.document_id AS document_id')
+            ->where('current_owner_id', $user->id)
+            ->orderBy('date_forwarded', 'desc')
+            ->paginate(5);
+
+        //Get all the documents uploaded by the current user as per deparment
+        // $documents = $documents = Document::with(['latestRouting', 'department', 'files'])
+        //           ->join('departments', 'documents.department_id', '=', 'departments.id')
+        //           ->select('documents.*', 'departments.name AS department_name', 'documents.document_id AS document_id')
+        //           ->where('department_id', $user->department_id)
+        //           ->orderBy('date_forwarded', 'desc')
+        //           ->paginate(5);
 
         //   gets all the documents regardless on deparment_id
         // $documents = Document::with(['latestRouting', 'department', 'files'])
