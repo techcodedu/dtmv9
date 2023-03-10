@@ -72,10 +72,12 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="department_id">Department:</label>
-                                <select name="department_id" id="department_id" class="form-control" required>
-                                    <option value="">Select department</option>
+                                <select name="department_id" id="department_id" class="form-control" required disabled>
+                                    <option value="{{ $user->department_id }}" selected>{{ $user->department->name }}</option>
                                     @foreach($departments as $department)
-                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                        @if ($department->id != $user->department_id)
+                                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -90,7 +92,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
+                            {{-- <div class="form-group col-md-6">
                                 <label for="status">Status:</label>
                                 <select name="status" id="status" class="form-control" required>
                                     <option value="">Select status</option>
@@ -98,7 +100,21 @@
                                         <option value="{{ $status }}">{{ ucfirst($status) }}</option>
                                     @endforeach
                                 </select>
+                            </div> --}}
+                            <div class="form-group col-md-6">
+                                <label for="status">Status:</label>
+                                <select name="status" id="status" class="form-control" required>
+                                    <option value="">Select status</option>
+                                    @foreach(App\Models\Document::STATUS as $status)
+                                        @if (Auth::user()->role === 'college' && $status !== 'forwarded')
+                                            <option value="{{ $status }}" disabled>{{ ucfirst($status) }}</option>
+                                        @else
+                                            <option value="{{ $status }}">{{ ucfirst($status) }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                             </div>
+                            
                         </div>
                         <div class="form-group">
                             <label for="file">Attachments:</label>
@@ -125,14 +141,4 @@
         </div>
     </div>
 </div>
-
-<style>
-.card {
-    margin-top: 50px;
-}
-</style>
-
-
-
-
 @endsection

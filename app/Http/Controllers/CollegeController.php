@@ -32,8 +32,9 @@ class CollegeController extends Controller
     {
         $departments = Department::all();
         $offices = Office::all();
+        $user = Auth::user();
     
-        return view('college.show_create_document', compact('departments', 'offices'));
+        return view('college.show_create_document', compact('departments', 'offices','user'));
     }
     public function storeDocument(Request $request)
     {
@@ -51,7 +52,6 @@ class CollegeController extends Controller
         // Validate the input data
         $validatedData = $request->validate([
             'document_type' => 'required',
-            'department_id' => 'required|exists:departments,id',
             'office_id' => 'required|exists:offices,id',
             'status' => 'required|in:draft,forwarded,endorsed,approved,signed,released',
             'file' => 'required|mimes:pdf,doc,docx|max:2048'
@@ -68,7 +68,7 @@ class CollegeController extends Controller
             'date_created' => now(),
             'date_forwarded' => now(),
             'date_modified' => now(),
-            'department_id' => $validatedData['department_id'],
+            'department_id' => $user->department_id
         ]);
     
         // Save the document to the database
@@ -80,7 +80,7 @@ class CollegeController extends Controller
             'from_office_id' => $user->office_id,
             'to_office_id' => $validatedData['office_id'],
             'forwarded_by_user_id' => $user->id,
-            'status' => Routing::STATUS_RECEIVED,
+            'status' => Routing::STATUS_FORWARDED,
             'date_forwarded' => now(),
         ]);
         
@@ -143,10 +143,10 @@ class CollegeController extends Controller
 
     
         // Update the user's department ID, if necessary
-        if ($user->role === 'college') {
-            $user->department_id = $validatedData['department_id'];
-            $user->save();
-        }
+        // if ($user->role === 'college') {
+        //     $user->department_id = $validatedData['department_id'];
+        //     $user->save();
+        // }
     
         // Redirect back to the create document page with a success message
         return redirect()->route('college.show_create_document')->with('success', 'Document created successfully.');

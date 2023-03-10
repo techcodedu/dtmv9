@@ -32,7 +32,7 @@
             <div class="col-md-12">
                 <h2>Add System User</h2>
                 @if (session('success'))
-                 <div class="alert alert-success">
+                 <div class="alert alert-success" id="success-message">
                     {{ session('success') }}
                 </div>
                 @endif
