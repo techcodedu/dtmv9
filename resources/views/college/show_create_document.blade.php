@@ -44,6 +44,11 @@
 @endsection
 
 @section('content')
+    @if(session('showDuplicateFileModal'))
+        @include('_partials.file_exist_modal')
+    @endif
+
+@section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10 col-sm-12">
@@ -57,7 +62,7 @@
                             {{ session('success') }}
                         </div>
                     @endif
-                    <form method="POST" action="{{ route('college.store_document') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('college.store_document') }}" enctype="multipart/form-data" id="document-form">
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -127,15 +132,19 @@
                             <button type="submit" class="btn btn-primary btn-block">Submit</button>
                         </div>
                     </form>
-                    <!-- @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif -->
+                    @if ($errors->has('file'))
+                        {{-- modal --}}
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+                        <script>
+                            $(function() {
+                            $('#alreadyForwardedModal').modal('show');
+                            $('#document-form').on('submit', function(e) {
+                                e.preventDefault();
+                            });
+                            });
+                        </script>
+                    @endif
+
                 </div>
             </div>
         </div>

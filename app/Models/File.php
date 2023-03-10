@@ -16,6 +16,7 @@ class File extends Model
         'filename',
         'file_type',
         'file_size',
+        'hash'
     ];
     
 
