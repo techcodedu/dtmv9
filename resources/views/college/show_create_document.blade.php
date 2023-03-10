@@ -88,7 +88,8 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            {{-- enables all offices --}}
+                            {{-- <div class="form-group col-md-6">
                                 <label for="office_id">Forward To Office:</label>
                                 <select name="office_id" id="office_id" class="form-control" required>
                                     <option value="">Select office</option>
@@ -96,7 +97,26 @@
                                         <option value="{{ $office->id }}">{{ $office->name }}</option>
                                     @endforeach
                                 </select>
+                            </div> --}}
+                            <div class="form-group col-md-6">
+                                <label for="office_id">Forward To Office:</label>
+                                <select name="office_id" id="office_id" class="form-control" required>
+                                    <option value="">Select office</option>
+                                    @foreach($offices as $office)
+                                        @if (Auth::user()->role === 'college' && $office->id === 1)
+                                            {{-- If user role is college and office is Campus Records, enable the option --}}
+                                            <option value="{{ $office->id }}">{{ $office->name }}</option>
+                                        @elseif (Auth::user()->role === 'college')
+                                            {{-- If user role is college and office is not Campus Records, disable the option --}}
+                                            <option value="{{ $office->id }}" disabled>{{ $office->name }}</option>
+                                        @else
+                                            {{-- For other users, allow all offices --}}
+                                            <option value="{{ $office->id }}">{{ $office->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                             </div>
+                            {{-- enables all status --}}
                             {{-- <div class="form-group col-md-6">
                                 <label for="status">Status:</label>
                                 <select name="status" id="status" class="form-control" required>
@@ -112,9 +132,9 @@
                                     <option value="">Select status</option>
                                     @foreach(App\Models\Document::STATUS as $status)
                                         @if (Auth::user()->role === 'college' && $status !== 'forwarded')
-                                            <option value="{{ $status }}" disabled>{{ ucfirst($status) }}</option>
+                                            <option  value="{{ $status }}" disabled>{{ ucfirst($status) }}</option>
                                         @else
-                                            <option value="{{ $status }}">{{ ucfirst($status) }}</option>
+                                            <option class="forwarded-option" value="{{ $status }}">{{ ucfirst($status) }}</option>
                                         @endif
                                     @endforeach
                                 </select>

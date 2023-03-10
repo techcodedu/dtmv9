@@ -64,7 +64,7 @@
                                     <span class="time"><i class="far fa-clock"></i> {{ $document->date_forwarded }}</span>
                                     <h3 class="timeline-header"><a href="#">{{ $document->document_id }}</a> forwarded to {{ optional($document->latestRouting->toOffice)->name }}</h3>
                                     <div class="timeline-body">
-                                        {{ $document->document_type }} from {{ $document->department->name }} with filename {{ $document->filename }} has been forwarded to {{ optional($document->latestRouting->toOffice)->name }} for processing.
+                                        {{ $document->document_type }} from {{ $document->department->name }} with filename {{ $document->filename }} has been forwarded to {{ optional($document->latestRouting->toOffice)->name }} for endorsement.
                                     </div>
                                     <div class="timeline-footer">
                                         <span class="badge badge-{{ $document->latestRouting->status_color }}">{{ $document->latestRouting->status }}</span>

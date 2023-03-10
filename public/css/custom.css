@@ -57,3 +57,10 @@ td.d-flex.justify-content-between.align-items-center .flex-wrap {
   border-radius: 0.2rem;
 }
 
+/* hightlight on the select option for college that it can only choose forwared  */
+
+.forwarded-option:hover {
+        background-color: lightgreen;
+        cursor: pointer;
+}
+
