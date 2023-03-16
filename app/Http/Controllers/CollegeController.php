@@ -12,6 +12,8 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 
 
 
@@ -85,6 +87,17 @@ class CollegeController extends Controller
             // Move the file to the storage directory
             $file->storeAs('documents', $uniqueFilename, 'public');
 
+                        // Generate a new document number
+            $maxDocumentNumber = (int) Document::max('document_id');
+            $newDocumentNumber = str_pad($maxDocumentNumber + 1, 3, '0', STR_PAD_LEFT);
+
+            // Loop until a unique document ID is found
+            while (Document::where('document_id', 'DOC'.$newDocumentNumber)->exists()) {
+                $newDocumentNumber++;
+            }
+
+            $documentId = 'DOC'.$newDocumentNumber;
+
             // Create a new Document instance with the validated data
             $document = new Document([
                 'document_type' => $request->input('document_type'),
@@ -93,9 +106,9 @@ class CollegeController extends Controller
                 'date_created' => now(),
                 'date_forwarded' => now(),
                 'date_modified' => now(),
-                'department_id' => Auth::user()->department_id
+                'department_id' => Auth::user()->department_id,
+                'document_id' => $documentId,
             ]);
-           
 
             // Save the document to the database
             $document->save();
@@ -109,7 +122,6 @@ class CollegeController extends Controller
                 'status' => Routing::STATUS_FORWARDED,
                 'date_forwarded' => now(),
             ]);
-            
 
             // Validate the routing data
             $validator = Validator::make($routing->toArray(), [
@@ -126,7 +138,6 @@ class CollegeController extends Controller
             }
             // Set the document_id attribute of the Routing instance
             $routing->document_id = $document->document_id;
-
             
             // Save the routing to the database
             $routing->save();

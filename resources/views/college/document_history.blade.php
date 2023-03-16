@@ -59,7 +59,7 @@
                                 <span class="bg-red">{{ $document->date_forwarded }}</span>
                             </div>
                             <div>
-                                <i class="fas fa-file bg-green"></i>
+                                <i class="fas fa-envelope bg-blue"></i>
                                 <div class="timeline-item">
                                     <span class="time"><i class="far fa-clock"></i> {{ $document->date_forwarded }}</span>
                                     <h3 class="timeline-header"><a href="#">{{ $document->document_id }}</a> forwarded to {{ optional($document->latestRouting->toOffice)->name }}</h3>
